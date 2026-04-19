@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Event{
+  id Int @id @default(autoincrement())
+  title String 
+  description String
+  startDate DateTime 
+  endDate DateTime
+  place String
+  sessions Session[] 
+}
+model Session{
+  id Int @id @default(autoincrement())
+  title String 
+  description String
+  startDate DateTime 
+  endDate DateTime
+  Capacity Int
+  roomId Int
+  room Room @relation(fields: [roomId],references: [id]) 
+  eventId Int
+  event Event @relation(fields: [eventId],references: [id])
+  Speaker Speaker @relation("SessionSpeakers")
+  questions Question[]
+}
+model Room{
+  id Int @id @default(autoincrement())
+  name String
+  sessions Session[]
+}
+
+model Speaker {
+  id          Int       @id @default(autoincrement())
+  fullName    String
+  photo       String?
+  biography   String
+  links       Json?
+  speakers Speaker[] @relation("SessionSpeakers")
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  content   String
+  name      String?
+  upvotes   Int      @default(0)
+  createdAt DateTime @default(now())
+  sessionId Int
+  session   Session  @relation(fields: [sessionId], references: [id])
+}
