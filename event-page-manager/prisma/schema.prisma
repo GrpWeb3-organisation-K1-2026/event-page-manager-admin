@@ -18,18 +18,18 @@ model Event {
 }
 
 model Session {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   description String
   startDate   DateTime
   endDate     DateTime
   capacity    Int
   roomId      Int
-  room        Room      @relation(fields: [roomId], references: [id])
+  room        Room       @relation(fields: [roomId], references: [id])
   eventId     Int
-  event       Event     @relation(fields: [eventId], references: [id])
-  speakerId   Int
-  speaker     Speaker   @relation(fields: [speakerId], references: [id])
+  event       Event      @relation(fields: [eventId], references: [id])
+  speakerId   Int?
+  speaker     Speaker?   @relation(fields: [speakerId], references: [id])
   questions   Question[]
 }
 
