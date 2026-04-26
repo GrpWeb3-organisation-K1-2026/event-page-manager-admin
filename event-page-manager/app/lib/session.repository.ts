@@ -1,6 +1,6 @@
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/Prisma";
 import { Prisma } from "@/app/generated/prisma";
-import type { SessionFilters, CreateSessionDto, UpdateSessionDTO } from "./session.types";
+import type { SessionFilters, CreateSessionDTO, UpdateSessionDTO } from "./session.types";
 
 export const SESSION_INCLUDE = {
   room: true,
@@ -40,7 +40,7 @@ export const sessionRepository = {
     });
   },
 
-  async create(data: CreateSessionDto) {
+  async create(data: CreateSessionDTO) {
     const { speakerId, startDate, endDate, ...rest } = data;
     return prisma.session.create({
       data: {
@@ -55,7 +55,6 @@ export const sessionRepository = {
 
   async update(id: number, data: UpdateSessionDTO) {
     const { speakerId, roomId, startDate, endDate, ...rest } = data;
-
     return prisma.session.update({
       where: { id },
       data: {

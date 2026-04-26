@@ -1,7 +1,12 @@
 import { Prisma } from "@/app/generated/prisma";
 import { sessionRepository } from "./session.repository";
-import type { SessionFilters, CreateSessionDTO, UpdateSessionDTO } from "./session.types";
-import { NotFoundError, ValidationError } from "./session.types";
+import {
+  NotFoundError,
+  ValidationError,
+  type SessionFilters,
+  type CreateSessionDTO,
+  type UpdateSessionDTO,
+} from "./session.types";
 
 export const sessionService = {
 
@@ -9,15 +14,9 @@ export const sessionService = {
     const page  = Math.max(1,   filters.page  ?? 1);
     const limit = Math.min(100, filters.limit ?? 20);
     const { rows, total } = await sessionRepository.findMany({ ...filters, page, limit });
-
     return {
       data: rows,
-      meta: {
-        total,
-        page,
-        limit,
-        pageCount: Math.ceil(total / limit),
-      },
+      meta: { total, page, limit, pageCount: Math.ceil(total / limit) },
     };
   },
 
@@ -28,7 +27,7 @@ export const sessionService = {
   },
 
   async create(dto: CreateSessionDTO) {
-    validateSessionDTO(dto);
+    validateCreateDTO(dto);
     try {
       return await sessionRepository.create(dto);
     } catch (err) {
@@ -37,9 +36,7 @@ export const sessionService = {
   },
 
   async update(id: number, dto: UpdateSessionDTO) {
-    if (dto.startDate || dto.endDate) {
-      validateDates(dto.startDate, dto.endDate);
-    }
+    if (dto.startDate || dto.endDate) validateDates(dto.startDate, dto.endDate);
     try {
       return await sessionRepository.update(id, dto);
     } catch (err) {
@@ -62,34 +59,32 @@ export const sessionService = {
   },
 };
 
-function validateSessionDTO(dto: CreateSessionDTO) {
+// ─── Helpers de validation ────────────────────────────────────────────────────
+function validateCreateDTO(dto: CreateSessionDTO) {
   const required = ["title", "description", "startDate", "endDate", "capacity", "roomId", "eventId"] as const;
   const missing  = required.filter((k) => dto[k] == null);
   if (missing.length) throw new ValidationError(`Missing fields: ${missing.join(", ")}`);
 
-  if (typeof dto.title !== "string" || dto.title.trim() === "") {
+  if (typeof dto.title !== "string" || dto.title.trim() === "")
     throw new ValidationError("title must be a non-empty string");
-  }
-  if (typeof dto.capacity !== "number" || dto.capacity < 1) {
+
+  if (typeof dto.capacity !== "number" || dto.capacity < 1)
     throw new ValidationError("capacity must be a positive integer");
-  }
+
   validateDates(dto.startDate, dto.endDate);
 }
 
 function validateDates(startDate?: string, endDate?: string) {
   const start = new Date(startDate ?? "");
   const end   = new Date(endDate   ?? "");
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+  if (isNaN(start.getTime()) || isNaN(end.getTime()))
     throw new ValidationError("startDate and endDate must be valid ISO dates");
-  }
-  if (end <= start) {
+  if (end <= start)
     throw new ValidationError("endDate must be after startDate");
-  }
 }
 
 function handlePrismaError(err: unknown): never {
-  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2003") {
+  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2003")
     throw new ValidationError("roomId, eventId or speakerId does not exist");
-  }
   throw err;
 }
