@@ -1,5 +1,6 @@
 import { Prisma } from "@/app/generated/prisma";
 import { sessionRepository } from "./session.repository";
+import { withLiveFields, withLiveFieldsMany } from "./session.computed";
 import {
   NotFoundError,
   ValidationError,
@@ -15,7 +16,7 @@ export const sessionService = {
     const limit = Math.min(100, filters.limit ?? 20);
     const { rows, total } = await sessionRepository.findMany({ ...filters, page, limit });
     return {
-      data: rows,
+      data: withLiveFieldsMany(rows),
       meta: { total, page, limit, pageCount: Math.ceil(total / limit) },
     };
   },
@@ -23,13 +24,14 @@ export const sessionService = {
   async getById(id: number) {
     const session = await sessionRepository.findById(id);
     if (!session) throw new NotFoundError("Session", id);
-    return session;
+    return withLiveFields(session);
   },
 
   async create(dto: CreateSessionDTO) {
     validateCreateDTO(dto);
     try {
-      return await sessionRepository.create(dto);
+      const session = await sessionRepository.create(dto);
+      return withLiveFields(session);
     } catch (err) {
       handlePrismaError(err);
     }
@@ -38,7 +40,8 @@ export const sessionService = {
   async update(id: number, dto: UpdateSessionDTO) {
     if (dto.startDate || dto.endDate) validateDates(dto.startDate, dto.endDate);
     try {
-      return await sessionRepository.update(id, dto);
+      const session = await sessionRepository.update(id, dto);
+      return withLiveFields(session);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
         throw new NotFoundError("Session", id);

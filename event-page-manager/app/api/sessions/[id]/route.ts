@@ -5,6 +5,16 @@ import type { UpdateSessionDTO } from "@/app/lib/session.types";
 
 type Params = { params: Promise<{ id: string }> };
 
+/**
+ * GET /api/sessions/:id
+ * Retourne la session avec les champs calculés live :
+ *   - isLive          : session en cours maintenant
+ *   - isUpcoming      : pas encore commencée
+ *   - isEnded         : terminée
+ *   - durationMinutes : durée totale en minutes
+ *   - remainingMinutes: minutes restantes (null si pas en cours)
+ *   - progressPercent : % d'avancement (null si pas en cours)
+ */
 export async function GET(_req: NextRequest, { params }: Params) {
   const { id } = await params;
   try {
@@ -15,6 +25,11 @@ export async function GET(_req: NextRequest, { params }: Params) {
   }
 }
 
+/**
+ * PATCH /api/sessions/:id
+ * Met à jour partiellement une session.
+ * La réponse inclut également les champs calculés live.
+ */
 export async function PATCH(request: NextRequest, { params }: Params) {
   const { id } = await params;
   let body: UpdateSessionDTO;
@@ -32,6 +47,10 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   }
 }
 
+/**
+ * DELETE /api/sessions/:id
+ * Supprime une session. Retourne 204 sans contenu.
+ */
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const { id } = await params;
   try {
