@@ -41,13 +41,18 @@ export const sessionRepository = {
   },
 
   async create(data: CreateSessionDTO) {
-    const { speakerId, startDate, endDate, ...rest } = data;
+    const { speakerId, roomId, eventId, startDate, endDate, title, description, capacity } = data;
+
     return prisma.session.create({
       data: {
-        ...rest,
+        title,
+        description,
+        capacity,
         startDate: new Date(startDate),
         endDate:   new Date(endDate),
-        ...(speakerId != null && { speakerId }),
+        room:    { connect: { id: roomId } },
+        event:   { connect: { id: eventId } },
+        speaker: speakerId != null ? { connect: { id: speakerId } } : undefined,
       },
       include: SESSION_INCLUDE,
     });
@@ -55,15 +60,17 @@ export const sessionRepository = {
 
   async update(id: number, data: UpdateSessionDTO) {
     const { speakerId, roomId, startDate, endDate, ...rest } = data;
+
+    const updateData: Prisma.SessionUpdateInput = { ...rest };
+
+    if (startDate != null) updateData.startDate = new Date(startDate);
+    if (endDate   != null) updateData.endDate   = new Date(endDate);
+    if (roomId    != null) updateData.room      = { connect: { id: roomId } };
+    if (speakerId != null) updateData.speaker   = { connect: { id: speakerId } };
+
     return prisma.session.update({
       where: { id },
-      data: {
-        ...rest,
-        ...(startDate && { startDate: new Date(startDate) }),
-        ...(endDate   && { endDate:   new Date(endDate) }),
-        ...(roomId    != null && { room:    { connect: { id: roomId } } }),
-        ...(speakerId != null && { speaker: { connect: { id: speakerId } } }),
-      },
+      data: updateData,
       include: SESSION_INCLUDE,
     });
   },

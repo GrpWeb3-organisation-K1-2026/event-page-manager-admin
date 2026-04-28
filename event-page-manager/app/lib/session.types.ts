@@ -8,8 +8,8 @@ export interface SessionFilters {
 export interface CreateSessionDTO {
   title: string;
   description: string;
-  startDate: string; 
-  endDate: string;  
+  startDate: string;
+  endDate: string;
   capacity: number;
   roomId: number;
   eventId: number;

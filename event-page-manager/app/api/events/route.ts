@@ -10,7 +10,7 @@ export async function GET() {
             orderBy: { startDate: "asc" },
         });
 
-        return NextResponse.json(events);
+        return NextResponse.json({ data: events });
     } catch (error) {
         console.error(error);
         return NextResponse.json(
@@ -27,9 +27,7 @@ export async function POST(request: NextRequest) {
 
         if (!title || !description || !startDate || !endDate || !place) {
             return NextResponse.json(
-                {
-                    error: "All fields are required",
-                },
+                { error: "All fields are required" },
                 { status: 400 }
             );
         }
@@ -44,8 +42,7 @@ export async function POST(request: NextRequest) {
             },
         });
 
-        return NextResponse.json(event, { status: 201 });
-
+        return NextResponse.json({ data: event }, { status: 201 });
     } catch (error) {
         console.error(error);
         return NextResponse.json(
