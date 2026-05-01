@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { CreateQuestionSchema } from "@/app/lib/question.schemas";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -46,25 +47,26 @@ export async function POST(req: NextRequest, { params }: Params) {
     );
   }
 
-  let body: { content: string; name?: string };
+  let rawBody: unknown;
   try {
-    body = await req.json();
+    rawBody = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { content, name } = body;
+  const parsed = CreateQuestionSchema.safeParse(rawBody);
 
-  if (!content || typeof content !== "string" || content.trim() === "") {
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "content is required and must be a non-empty string" },
+      { error: parsed.error.issues[0].message },
       { status: 422 }
     );
   }
 
+  const { content, name } = parsed.data;
   const question = await prisma.question.create({
     data: {
-      content: content.trim(),
+      content,
       name: name ?? null,
       sessionId,
     },
