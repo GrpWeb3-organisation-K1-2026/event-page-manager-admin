@@ -1,22 +1,13 @@
-export interface SessionFilters {
-  eventId?: number;
-  roomId?: number;
+export interface RoomFilters {
   page?: number;
   limit?: number;
 }
 
-export interface CreateSessionDTO {
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  capacity: number;
-  roomId: number;
-  eventId: number;
-  speakerId?: number;
+export interface CreateRoomDTO {
+  name: string;
 }
 
-export type UpdateSessionDTO = Partial<CreateSessionDTO>;
+export type UpdateRoomDTO = Partial<CreateRoomDTO>;
 
 export class NotFoundError extends Error {
   constructor(resource: string, id: number) {
@@ -29,5 +20,12 @@ export class ValidationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ValidationError";
+  }
+}
+
+export class ConflictError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ConflictError";
   }
 }
