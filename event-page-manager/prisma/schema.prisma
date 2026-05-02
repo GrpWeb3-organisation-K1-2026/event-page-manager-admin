@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
@@ -26,19 +27,11 @@ model Session {
   capacity    Int
   roomId      Int
   eventId     Int
-  questions   Question[]
+
   event       Event            @relation(fields: [eventId], references: [id])
   room        Room             @relation(fields: [roomId], references: [id])
+  questions   Question[]
   speakers    SessionSpeaker[]
-}
-
-model SessionSpeaker {
-  sessionId Int
-  speakerId Int
-  session   Session @relation(fields: [sessionId], references: [id])
-  speaker   Speaker @relation(fields: [speakerId], references: [id])
-
-  @@id([sessionId, speakerId])
 }
 
 model Room {
@@ -53,7 +46,18 @@ model Speaker {
   photo     String?
   biography String
   links     Json?
+
   sessions  SessionSpeaker[]
+}
+
+model SessionSpeaker {
+  sessionId Int
+  speakerId Int
+
+  session   Session @relation(fields: [sessionId], references: [id])
+  speaker   Speaker @relation(fields: [speakerId], references: [id])
+
+  @@id([sessionId, speakerId])
 }
 
 model Question {
@@ -62,6 +66,7 @@ model Question {
   name      String?
   upvotes   Int      @default(0)
   createdAt DateTime @default(now())
+
   sessionId Int
   session   Session  @relation(fields: [sessionId], references: [id])
 }
