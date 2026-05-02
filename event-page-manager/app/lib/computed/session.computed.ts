@@ -1,19 +1,17 @@
-import { SESSION_INCLUDE } from "./session.repository";
+import { SESSION_INCLUDE } from "../repository/session.repository";
 import { Prisma } from "@/app/generated/prisma";
 
-// Type d'une session retournée par Prisma avec les includes
 type SessionWithIncludes = Prisma.SessionGetPayload<{
   include: typeof SESSION_INCLUDE;
 }>;
 
 export interface SessionLiveFields {
-  isLive: boolean;       // session en cours maintenant
-  isUpcoming: boolean;   // pas encore commencée
-  isEnded: boolean;      // terminée
-  durationMinutes: number; // durée totale en minutes
-  remainingMinutes: number | null; // minutes restantes (null si pas en cours)
-  progressPercent: number | null;  // % d'avancement (null si pas en cours)
-}
+  isLive: boolean;     
+  isUpcoming: boolean;  
+  isEnded: boolean;    
+  durationMinutes: number; 
+  remainingMinutes: number | null; 
+  progressPercent: number | null;  
 
 export function computeLiveFields(session: SessionWithIncludes): SessionLiveFields {
   const now        = new Date();

@@ -1,6 +1,6 @@
 import { prisma } from "@/app/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
-import type { SessionFilters, CreateSessionDTO, UpdateSessionDTO } from "./session.types";
+import type { SessionFilters, CreateSessionDTO, UpdateSessionDTO } from "../types/session.types";
 
 export const SESSION_INCLUDE = {
   room: true,

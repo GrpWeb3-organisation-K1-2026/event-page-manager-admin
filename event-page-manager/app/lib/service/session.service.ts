@@ -1,13 +1,13 @@
 import { Prisma } from "@/app/generated/prisma";
-import { sessionRepository } from "./session.repository";
-import { withLiveFields, withLiveFieldsMany } from "./session.computed";
+import { sessionRepository } from "../repository/session.repository";
+import { withLiveFields, withLiveFieldsMany } from "../computed/session.computed";
 import {
   NotFoundError,
   ValidationError,
   type SessionFilters,
   type CreateSessionDTO,
   type UpdateSessionDTO,
-} from "./session.types";
+} from "../types/session.types";
 
 export const sessionService = {
 
@@ -62,7 +62,6 @@ export const sessionService = {
   },
 };
 
-// ─── Validation helpers ───────────────────────────────────────────────────────
 function validateCreateDTO(dto: CreateSessionDTO) {
   const required = ["title", "description", "startDate", "endDate", "capacity", "roomId", "eventId"] as const;
   const missing  = required.filter((k) => dto[k] == null);

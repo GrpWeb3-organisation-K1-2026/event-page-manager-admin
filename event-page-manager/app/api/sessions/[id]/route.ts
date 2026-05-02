@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sessionService } from "@/app/lib/session.service";
+import { sessionService } from "@/app/lib/service/session.service";
 import { handleError } from "@/app/lib/http";
 import type { UpdateSessionDTO } from "@/app/lib/session.types";
 
