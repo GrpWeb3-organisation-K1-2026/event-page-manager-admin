@@ -13,10 +13,19 @@ export interface CreateSessionDTO {
   capacity: number;
   roomId: number;
   eventId: number;
-  speakerId?: number;
+  speakerIds?: number[];
 }
 
-export type UpdateSessionDTO = Partial<CreateSessionDTO>;
+export interface UpdateSessionDTO {
+  title?: string;
+  description?: string;
+  startDate?: string;
+  endDate?: string;
+  capacity?: number;
+  roomId?: number;
+  eventId?: number;
+  speakerIds?: number[];
+}
 
 export class NotFoundError extends Error {
   constructor(resource: string, id: number) {

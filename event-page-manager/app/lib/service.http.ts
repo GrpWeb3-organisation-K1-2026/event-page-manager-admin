@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { NotFoundError, ValidationError } from "../types/session.types";
+import { NotFoundError, ValidationError } from "./types/session.types";
 
 export function handleError(err: unknown): NextResponse {
     if (err instanceof NotFoundError) {

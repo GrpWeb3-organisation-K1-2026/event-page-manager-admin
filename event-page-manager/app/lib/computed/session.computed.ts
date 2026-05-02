@@ -6,31 +6,37 @@ type SessionWithIncludes = Prisma.SessionGetPayload<{
 }>;
 
 export interface SessionLiveFields {
-  isLive: boolean;     
-  isUpcoming: boolean;  
-  isEnded: boolean;    
-  durationMinutes: number; 
-  remainingMinutes: number | null; 
-  progressPercent: number | null;  
+  isLive: boolean;
+  isUpcoming: boolean;
+  isEnded: boolean;
+  durationMinutes: number;
+  remainingMinutes: number | null;
+  progressPercent: number | null;
 }
 
 export function computeLiveFields(session: SessionWithIncludes): SessionLiveFields {
-  const now        = new Date();
-  const start      = new Date(session.startDate);
-  const end        = new Date(session.endDate);
+  const now   = new Date();
+  const start = new Date(session.startDate);
+  const end   = new Date(session.endDate);
 
   const isLive     = now >= start && now <= end;
   const isUpcoming = now < start;
   const isEnded    = now > end;
 
-  const durationMinutes = Math.round((end.getTime() - start.getTime()) / 60_000);
+  const durationMinutes = Math.round(
+    (end.getTime() - start.getTime()) / 60_000
+  );
 
   const remainingMinutes = isLive
     ? Math.round((end.getTime() - now.getTime()) / 60_000)
     : null;
 
   const progressPercent = isLive
-    ? Math.round(((now.getTime() - start.getTime()) / (end.getTime() - start.getTime())) * 100)
+    ? Math.round(
+        ((now.getTime() - start.getTime()) /
+          (end.getTime() - start.getTime())) *
+          100
+      )
     : null;
 
   return {

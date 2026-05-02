@@ -5,7 +5,11 @@ import type { SessionFilters, CreateSessionDTO, UpdateSessionDTO } from "../type
 export const SESSION_INCLUDE = {
   room: true,
   event: { select: { id: true, title: true } },
-  speaker: { select: { id: true, fullName: true, photo: true } },
+  speakers: {
+    include: {
+      speaker: { select: { id: true, fullName: true, photo: true } },
+    },
+  },
   _count: { select: { questions: true } },
 } satisfies Prisma.SessionInclude;
 
@@ -41,7 +45,7 @@ export const sessionRepository = {
   },
 
   async create(data: CreateSessionDTO) {
-    const { speakerId, roomId, eventId, startDate, endDate, title, description, capacity } = data;
+    const { speakerIds, roomId, eventId, startDate, endDate, title, description, capacity } = data;
 
     return prisma.session.create({
       data: {
@@ -52,21 +56,31 @@ export const sessionRepository = {
         endDate:   new Date(endDate),
         room:    { connect: { id: roomId } },
         event:   { connect: { id: eventId } },
-        speaker: speakerId != null ? { connect: { id: speakerId } } : undefined,
+        speakers: speakerIds && speakerIds.length > 0
+          ? {
+              create: speakerIds.map((speakerId) => ({ speakerId })),
+            }
+          : undefined,
       },
       include: SESSION_INCLUDE,
     });
   },
 
   async update(id: number, data: UpdateSessionDTO) {
-    const { speakerId, roomId, startDate, endDate, ...rest } = data;
+    const { speakerIds, roomId, startDate, endDate, ...rest } = data;
 
     const updateData: Prisma.SessionUpdateInput = { ...rest };
 
     if (startDate != null) updateData.startDate = new Date(startDate);
     if (endDate   != null) updateData.endDate   = new Date(endDate);
     if (roomId    != null) updateData.room      = { connect: { id: roomId } };
-    if (speakerId != null) updateData.speaker   = { connect: { id: speakerId } };
+
+    if (speakerIds != null) {
+      updateData.speakers = {
+        deleteMany: {},
+        create: speakerIds.map((speakerId) => ({ speakerId })),
+      };
+    }
 
     return prisma.session.update({
       where: { id },

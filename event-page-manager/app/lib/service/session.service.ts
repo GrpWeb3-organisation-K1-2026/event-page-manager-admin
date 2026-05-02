@@ -43,7 +43,10 @@ export const sessionService = {
       const session = await sessionRepository.update(id, dto);
       return withLiveFields(session);
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2025"
+      ) {
         throw new NotFoundError("Session", id);
       }
       handlePrismaError(err);
@@ -54,7 +57,10 @@ export const sessionService = {
     try {
       await sessionRepository.delete(id);
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2025"
+      ) {
         throw new NotFoundError("Session", id);
       }
       throw err;
@@ -63,8 +69,17 @@ export const sessionService = {
 };
 
 function validateCreateDTO(dto: CreateSessionDTO) {
-  const required = ["title", "description", "startDate", "endDate", "capacity", "roomId", "eventId"] as const;
-  const missing  = required.filter((k) => dto[k] == null);
+  const required = [
+    "title",
+    "description",
+    "startDate",
+    "endDate",
+    "capacity",
+    "roomId",
+    "eventId",
+  ] as const;
+
+  const missing = required.filter((k) => dto[k] == null);
   if (missing.length) throw new ValidationError(`Missing fields: ${missing.join(", ")}`);
 
   if (typeof dto.title !== "string" || dto.title.trim() === "")
@@ -72,6 +87,13 @@ function validateCreateDTO(dto: CreateSessionDTO) {
 
   if (typeof dto.capacity !== "number" || dto.capacity < 1)
     throw new ValidationError("capacity must be a positive integer");
+
+  if (dto.speakerIds !== undefined) {
+    if (!Array.isArray(dto.speakerIds))
+      throw new ValidationError("speakerIds must be an array of numbers");
+    if (dto.speakerIds.some((id) => typeof id !== "number"))
+      throw new ValidationError("speakerIds must be an array of numbers");
+  }
 
   validateDates(dto.startDate, dto.endDate);
 }
@@ -86,7 +108,10 @@ function validateDates(startDate?: string, endDate?: string) {
 }
 
 function handlePrismaError(err: unknown): never {
-  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2003")
+  if (
+    err instanceof Prisma.PrismaClientKnownRequestError &&
+    err.code === "P2003"
+  )
     throw new ValidationError("roomId, eventId or speakerId does not exist");
   throw err;
 }
