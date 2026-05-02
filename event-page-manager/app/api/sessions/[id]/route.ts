@@ -5,6 +5,9 @@ import type { UpdateSessionDTO } from "@/app/lib/types/session.types";
 
 type Params = { params: Promise<{ id: string }> };
 
+/**
+ * GET /api/sessions/:id
+ */
 export async function GET(_req: NextRequest, { params }: Params) {
   const { id } = await params;
   try {
@@ -15,6 +18,9 @@ export async function GET(_req: NextRequest, { params }: Params) {
   }
 }
 
+/**
+ * PATCH /api/sessions/:id
+ */
 export async function PATCH(request: NextRequest, { params }: Params) {
   const { id } = await params;
   let body: UpdateSessionDTO;
@@ -32,7 +38,9 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   }
 }
 
-
+/**
+ * DELETE /api/sessions/:id
+ */
 export async function DELETE(_req: NextRequest, { params }: Params) {
   const { id } = await params;
   try {

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sessionService } from "@/app/lib/service/session.service";
 import { handleError } from "@/app/lib/service.http";
-import type { CreateSessionDTO, SessionFilters } from "@/app/lib/types/session.types";
+import type {
+  CreateSessionDTO,
+  SessionFilters,
+} from "@/app/lib/types/session.types";
 
 /**
  * GET /api/sessions
@@ -11,10 +14,18 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const filters: SessionFilters = {
-    eventId: searchParams.get("eventId") ? Number(searchParams.get("eventId")) : undefined,
-    roomId:  searchParams.get("roomId")  ? Number(searchParams.get("roomId"))  : undefined,
-    page:    searchParams.get("page")    ? Number(searchParams.get("page"))    : undefined,
-    limit:   searchParams.get("limit")   ? Number(searchParams.get("limit"))   : undefined,
+    eventId: searchParams.get("eventId")
+      ? Number(searchParams.get("eventId"))
+      : undefined,
+    roomId: searchParams.get("roomId")
+      ? Number(searchParams.get("roomId"))
+      : undefined,
+    page: searchParams.get("page")
+      ? Number(searchParams.get("page"))
+      : undefined,
+    limit: searchParams.get("limit")
+      ? Number(searchParams.get("limit"))
+      : undefined,
   };
 
   try {

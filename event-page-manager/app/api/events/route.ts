@@ -1,98 +1,56 @@
 import { prisma } from "@/app/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-type Params = { params: Promise<{ id: string }> };
-
-export async function GET(_request: NextRequest, { params }: Params) {
+/**
+ * GET /api/events
+ * Returns the list of all events.
+ */
+export async function GET(_request: NextRequest) {
   try {
-    const { id } = await params;
-
-    const event = await prisma.event.findUnique({
-      where: { id: Number(id) },
+    const events = await prisma.event.findMany({
       include: {
-        sessions: {
-          include: {
-            room: true,
-            speakers: {
-              include: {
-                speaker: { select: { id: true, fullName: true, photo: true } },
-              },
-            },
-            _count: { select: { questions: true } },
-          },
-          orderBy: { startDate: "asc" },
-        },
+        _count: { select: { sessions: true } },
       },
+      orderBy: { startDate: "asc" },
     });
 
-    if (!event) {
-      return NextResponse.json({ error: "Event not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ data: event });
+    return NextResponse.json({ data: events });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: Params) {
+/**
+ * POST /api/events
+ * Creates a new event.
+ */
+export async function POST(request: NextRequest) {
   try {
-    const { id } = await params;
     const body = await request.json();
     const { title, description, startDate, endDate, place } = body;
 
-    const existing = await prisma.event.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!existing) {
-      return NextResponse.json({ error: "Event not found" }, { status: 404 });
-    }
-
-    const event = await prisma.event.update({
-      where: { id: Number(id) },
-      data: {
-        ...(title       !== undefined && { title }),
-        ...(description !== undefined && { description }),
-        ...(startDate   !== undefined && { startDate: new Date(startDate) }),
-        ...(endDate     !== undefined && { endDate:   new Date(endDate) }),
-        ...(place       !== undefined && { place }),
-      },
-    });
-
-    return NextResponse.json({ data: event });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
-}
-
-export async function DELETE(_request: NextRequest, { params }: Params) {
-  try {
-    const { id } = await params;
-
-    const existing = await prisma.event.findUnique({
-      where: { id: Number(id) },
-      include: { _count: { select: { sessions: true } } },
-    });
-
-    if (!existing) {
-      return NextResponse.json({ error: "Event not found" }, { status: 404 });
-    }
-
-    if (existing._count.sessions > 0) {
+    if (!title || !description || !startDate || !endDate || !place) {
       return NextResponse.json(
         {
-          error: `Cannot delete this event: ${existing._count.sessions} session(s) are associated with it`,
+          error:
+            "Missing required fields: title, description, startDate, endDate, place",
         },
-        { status: 409 }
+        { status: 422 }
       );
     }
 
-    await prisma.event.delete({ where: { id: Number(id) } });
+    const event = await prisma.event.create({
+      data: {
+        title,
+        description,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        place,
+      },
+    });
 
-    return new NextResponse(null, { status: 204 });
+    return NextResponse.json({ data: event }, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

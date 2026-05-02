@@ -1,6 +1,10 @@
 import { prisma } from "@/app/lib/prisma";
 import { Prisma } from "@/app/generated/prisma";
-import type { SessionFilters, CreateSessionDTO, UpdateSessionDTO } from "../types/session.types";
+import type {
+  SessionFilters,
+  CreateSessionDTO,
+  UpdateSessionDTO,
+} from "../types/session.types";
 
 export const SESSION_INCLUDE = {
   room: true,
@@ -14,13 +18,12 @@ export const SESSION_INCLUDE = {
 } satisfies Prisma.SessionInclude;
 
 export const sessionRepository = {
-
   async findMany(filters: SessionFilters) {
     const { eventId, roomId, page = 1, limit = 20 } = filters;
 
     const where: Prisma.SessionWhereInput = {
       ...(eventId && { eventId }),
-      ...(roomId  && { roomId }),
+      ...(roomId && { roomId }),
     };
 
     const [total, rows] = await prisma.$transaction([
@@ -45,7 +48,16 @@ export const sessionRepository = {
   },
 
   async create(data: CreateSessionDTO) {
-    const { speakerIds, roomId, eventId, startDate, endDate, title, description, capacity } = data;
+    const {
+      speakerIds,
+      roomId,
+      eventId,
+      startDate,
+      endDate,
+      title,
+      description,
+      capacity,
+    } = data;
 
     return prisma.session.create({
       data: {
@@ -53,14 +65,15 @@ export const sessionRepository = {
         description,
         capacity,
         startDate: new Date(startDate),
-        endDate:   new Date(endDate),
-        room:    { connect: { id: roomId } },
-        event:   { connect: { id: eventId } },
-        speakers: speakerIds && speakerIds.length > 0
-          ? {
-              create: speakerIds.map((speakerId) => ({ speakerId })),
-            }
-          : undefined,
+        endDate: new Date(endDate),
+        room: { connect: { id: roomId } },
+        event: { connect: { id: eventId } },
+        speakers:
+          speakerIds && speakerIds.length > 0
+            ? {
+                create: speakerIds.map((speakerId) => ({ speakerId })),
+              }
+            : undefined,
       },
       include: SESSION_INCLUDE,
     });
@@ -72,8 +85,8 @@ export const sessionRepository = {
     const updateData: Prisma.SessionUpdateInput = { ...rest };
 
     if (startDate != null) updateData.startDate = new Date(startDate);
-    if (endDate   != null) updateData.endDate   = new Date(endDate);
-    if (roomId    != null) updateData.room      = { connect: { id: roomId } };
+    if (endDate != null) updateData.endDate = new Date(endDate);
+    if (roomId != null) updateData.room = { connect: { id: roomId } };
 
     if (speakerIds != null) {
       updateData.speakers = {

@@ -14,14 +14,16 @@ export interface SessionLiveFields {
   progressPercent: number | null;
 }
 
-export function computeLiveFields(session: SessionWithIncludes): SessionLiveFields {
-  const now   = new Date();
+export function computeLiveFields(
+  session: SessionWithIncludes
+): SessionLiveFields {
+  const now = new Date();
   const start = new Date(session.startDate);
-  const end   = new Date(session.endDate);
+  const end = new Date(session.endDate);
 
-  const isLive     = now >= start && now <= end;
+  const isLive = now >= start && now <= end;
   const isUpcoming = now < start;
-  const isEnded    = now > end;
+  const isEnded = now > end;
 
   const durationMinutes = Math.round(
     (end.getTime() - start.getTime()) / 60_000
