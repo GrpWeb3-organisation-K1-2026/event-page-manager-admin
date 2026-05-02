@@ -12,6 +12,7 @@ export interface SessionLiveFields {
   durationMinutes: number; 
   remainingMinutes: number | null; 
   progressPercent: number | null;  
+}
 
 export function computeLiveFields(session: SessionWithIncludes): SessionLiveFields {
   const now        = new Date();
