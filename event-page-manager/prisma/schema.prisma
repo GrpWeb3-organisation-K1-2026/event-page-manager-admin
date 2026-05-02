@@ -18,18 +18,17 @@ model Event {
 }
 
 model Session {
-  id          Int        @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   title       String
   description String
   startDate   DateTime
   endDate     DateTime
   capacity    Int
   roomId      Int
-  room        Room       @relation(fields: [roomId], references: [id])
+  room        Room             @relation(fields: [roomId], references: [id])
   eventId     Int
-  event       Event      @relation(fields: [eventId], references: [id])
-  speakerId   Int?
-  speaker     Speaker?   @relation(fields: [speakerId], references: [id])
+  event       Event            @relation(fields: [eventId], references: [id])
+  speakers    SessionSpeaker[]
   questions   Question[]
 }
 
@@ -40,12 +39,21 @@ model Room {
 }
 
 model Speaker {
-  id        Int       @id @default(autoincrement())
+  id        Int              @id @default(autoincrement())
   fullName  String
   photo     String?
   biography String
   links     Json?
-  sessions  Session[]
+  sessions  SessionSpeaker[]
+}
+
+model SessionSpeaker {
+  sessionId Int
+  speakerId Int
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker   Speaker @relation(fields: [speakerId], references: [id], onDelete: Cascade)
+
+  @@id([sessionId, speakerId])
 }
 
 model Question {
