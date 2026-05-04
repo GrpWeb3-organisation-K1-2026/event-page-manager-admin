@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { roomService } from "@/app/lib/room.service";
-import { handleRoomError } from "@/app/lib/room.http";
-import type { UpdateRoomDTO } from "@/app/lib/room.types";
+import { roomService } from "@/app/lib/service/room.service";
+import { handleRoomError } from "@/app/lib/http/room.http";
+import type { UpdateRoomDTO } from "@/app/lib/types/room.types";
 
 type Params = { params: Promise<{ id: string }> };
 

@@ -1,5 +1,5 @@
 import { Prisma } from "@/app/generated/prisma";
-import { roomRepository } from "./room.repository";
+import { roomRepository } from "../repository/room.repository";
 import {
   NotFoundError,
   ValidationError,
@@ -7,7 +7,7 @@ import {
   type RoomFilters,
   type CreateRoomDTO,
   type UpdateRoomDTO,
-} from "./room.types";
+} from "../types/room.types";
 
 export const roomService = {
 

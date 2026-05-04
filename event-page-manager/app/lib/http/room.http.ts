@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { NotFoundError, ValidationError, ConflictError } from "./room.types";
+import { NotFoundError, ValidationError, ConflictError } from "../types/room.types";
 
 export function handleRoomError(err: unknown): NextResponse {
   if (err instanceof NotFoundError) {
