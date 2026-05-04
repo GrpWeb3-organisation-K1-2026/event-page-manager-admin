@@ -1,10 +1,9 @@
-export interface SessionFilters {
-  eventId?: number;
-  roomId?: number;
+export interface RoomFilters {
   page?: number;
   limit?: number;
 }
 
+<<<<<<<< HEAD:event-page-manager/app/lib/types/session.types.ts
 export interface CreateSessionDTO {
   title: string;
   description: string;
@@ -26,6 +25,13 @@ export interface UpdateSessionDTO {
   eventId?: number;
   speakerIds?: number[];
 }
+========
+export interface CreateRoomDTO {
+  name: string;
+}
+
+export type UpdateRoomDTO = Partial<CreateRoomDTO>;
+>>>>>>>> feature-branches-room-back:event-page-manager/app/lib/types/room.types.ts
 
 export class NotFoundError extends Error {
   constructor(resource: string, id: number) {
@@ -38,5 +44,12 @@ export class ValidationError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ValidationError";
+  }
+}
+
+export class ConflictError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ConflictError";
   }
 }
