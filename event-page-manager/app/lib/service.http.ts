@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { NotFoundError, ValidationError } from "./types/session.types";
 
-export function handleError(err: unknown): NextResponse {
+export function handleError(err: unknown): NextResponse{
   if (err instanceof NotFoundError) {
     return NextResponse.json({ error: err.message }, { status: 404 });
   }
