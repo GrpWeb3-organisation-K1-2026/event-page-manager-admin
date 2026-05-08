@@ -67,3 +67,22 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_speakerId_fkey" FOREIGN KEY ("spea
 
 -- AddForeignKey
 ALTER TABLE "Question" ADD CONSTRAINT "Question_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+ALTER TABLE "Session" DROP CONSTRAINT IF EXISTS "Session_speakerId_fkey";
+
+ALTER TABLE "Session" DROP COLUMN IF EXISTS "speakerId";
+
+CREATE TABLE "SessionSpeaker" (
+    "sessionId" INTEGER NOT NULL,
+    "speakerId" INTEGER NOT NULL,
+ 
+    CONSTRAINT "SessionSpeaker_pkey" PRIMARY KEY ("sessionId", "speakerId")
+);
+
+ALTER TABLE "SessionSpeaker"
+    ADD CONSTRAINT "SessionSpeaker_sessionId_fkey"
+    FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ 
+ALTER TABLE "SessionSpeaker"
+    ADD CONSTRAINT "SessionSpeaker_speakerId_fkey"
+    FOREIGN KEY ("speakerId") REFERENCES "Speaker"("id") ON DELETE CASCADE ON UPDATE CASCADE;
