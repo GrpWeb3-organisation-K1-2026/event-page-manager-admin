@@ -1,11 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["driverAdapters"]   
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("postgresql://postgres:050107@localhost:5432/eventdb")
+  url      = env("DATABASE_URL")        
 }
 
 model Event {
