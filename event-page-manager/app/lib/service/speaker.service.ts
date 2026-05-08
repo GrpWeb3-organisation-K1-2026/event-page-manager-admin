@@ -30,11 +30,9 @@ export const speakerService = {
 
   async create(dto: CreateSpeakerDTO) {
     validateCreateDTO(dto);
-
     if (dto.sessionIds && dto.sessionIds.length > 0) {
       await validateSessionsExist(dto.sessionIds);
     }
-
     try {
       const speaker = await speakerRepository.create(dto);
       return formatSpeakerWithStatus(speaker);
@@ -45,22 +43,16 @@ export const speakerService = {
 
   async update(id: number, dto: UpdateSpeakerDTO) {
     validateUpdateDTO(dto);
-
     const existing = await speakerRepository.findById(id);
     if (!existing) throw new NotFoundError("Speaker", id);
-
     if (dto.sessionIds !== undefined && dto.sessionIds.length > 0) {
       await validateSessionsExist(dto.sessionIds);
     }
-
     try {
       const speaker = await speakerRepository.update(id, dto);
       return formatSpeakerWithStatus(speaker);
     } catch (err) {
-      if (
-        err instanceof Prisma.PrismaClientKnownRequestError &&
-        err.code === "P2025"
-      ) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
         throw new NotFoundError("Speaker", id);
       }
       handlePrismaError(err);
@@ -70,24 +62,18 @@ export const speakerService = {
   async delete(id: number, force = false) {
     const speaker = await speakerRepository.findById(id);
     if (!speaker) throw new NotFoundError("Speaker", id);
-
     if (!force) {
       const activeSessions = await speakerRepository.findActiveSessions(id);
       if (activeSessions.length > 0) {
         throw new ConflictError(
-          `Cannot delete: ${activeSessions.length} active or upcoming session(s) linked to this speaker. ` +
-          `Use ?force=true to override.`
+          `Cannot delete: ${activeSessions.length} active or upcoming session(s) linked to this speaker. Use ?force=true to override.`
         );
       }
     }
-
     try {
       await speakerRepository.delete(id);
     } catch (err) {
-      if (
-        err instanceof Prisma.PrismaClientKnownRequestError &&
-        err.code === "P2025"
-      ) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
         throw new NotFoundError("Speaker", id);
       }
       throw err;
@@ -133,10 +119,7 @@ async function validateSessionsExist(sessionIds: number[]) {
 }
 
 function handlePrismaError(err: unknown): never {
-  if (
-    err instanceof Prisma.PrismaClientKnownRequestError &&
-    err.code === "P2003"
-  ) {
+  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2003") {
     throw new ValidationError("Foreign key constraint failed: referenced record does not exist");
   }
   throw err;
