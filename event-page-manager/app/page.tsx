@@ -172,10 +172,6 @@ function Hero() {
         </Link>
       </div>
 
-      <div className="absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#6b7280] text-[11px] tracking-[1.5px] uppercase animate-[fadeUp_1s_0.8s_ease_both]">
-        <div className="w-px h-10 bg-gradient-to-b from-indigo-500 to-transparent animate-pulse" />
-        scroll
-      </div>
     </section>
   );
 }
