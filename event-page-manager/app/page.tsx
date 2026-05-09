@@ -122,10 +122,7 @@ function Navbar() {
 function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-32 pb-20 z-10 overflow-hidden">
-      <div className="inline-flex items-center gap-2 bg-emerald-400/8 border border-emerald-400/20 text-emerald-400 text-[11px] font-bold tracking-[1.5px] uppercase px-3.5 py-1.5 rounded-full mb-10 animate-[fadeUp_0.6s_ease_both]">
-        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-        Real-time event platform
-      </div>
+
 
       <h1
         className="font-black leading-[0.95] tracking-[-3px] mb-7 animate-[fadeUp_0.6s_0.1s_ease_both]"
@@ -603,7 +600,7 @@ export default function HomePage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?fami"é;  T ly=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
         
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(20px); }
