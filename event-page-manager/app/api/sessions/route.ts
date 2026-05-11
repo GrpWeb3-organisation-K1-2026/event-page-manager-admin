@@ -1,5 +1,4 @@
-
-=import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { sessionService } from "@/app/lib/service/session.service";
 import { handleError } from "@/app/lib/service.http";
 import type {
