@@ -38,6 +38,8 @@ export const speakerService = {
       return formatSpeakerWithStatus(speaker);
     } catch (err) {
       handlePrismaError(err);
+      // handlePrismaError always throws, but TypeScript needs this:
+      throw err;
     }
   },
 
@@ -56,6 +58,7 @@ export const speakerService = {
         throw new NotFoundError("Speaker", id);
       }
       handlePrismaError(err);
+      throw err;
     }
   },
 

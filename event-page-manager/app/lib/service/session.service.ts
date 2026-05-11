@@ -37,11 +37,25 @@ export const sessionService = {
       return withLiveFields(session);
     } catch (err) {
       handlePrismaError(err);
+      // handlePrismaError always throws, but TypeScript needs this:
+      throw err;
     }
   },
 
   async update(id: number, dto: UpdateSessionDTO) {
-    if (dto.startDate || dto.endDate) validateDates(dto.startDate, dto.endDate);
+    // Fix: only validate if BOTH dates are provided, or validate independently
+    if (dto.startDate && dto.endDate) {
+      validateDates(dto.startDate, dto.endDate);
+    } else if (dto.startDate) {
+      const start = new Date(dto.startDate);
+      if (isNaN(start.getTime()))
+        throw new ValidationError("startDate must be a valid ISO date");
+    } else if (dto.endDate) {
+      const end = new Date(dto.endDate);
+      if (isNaN(end.getTime()))
+        throw new ValidationError("endDate must be a valid ISO date");
+    }
+
     try {
       const session = await sessionRepository.update(id, dto);
       return withLiveFields(session);
@@ -53,6 +67,7 @@ export const sessionService = {
         throw new NotFoundError("Session", id);
       }
       handlePrismaError(err);
+      throw err;
     }
   },
 
