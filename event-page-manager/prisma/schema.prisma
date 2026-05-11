@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  provider        = "prisma-client-js"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["driverAdapters"]   
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")        
 }
 
 model Event {
@@ -25,11 +27,12 @@ model Session {
   endDate     DateTime
   capacity    Int
   roomId      Int
-  room        Room             @relation(fields: [roomId], references: [id])
   eventId     Int
+
   event       Event            @relation(fields: [eventId], references: [id])
-  speakers    SessionSpeaker[]
+  room        Room             @relation(fields: [roomId], references: [id])
   questions   Question[]
+  speakers    SessionSpeaker[]
 }
 
 model Room {
@@ -44,14 +47,16 @@ model Speaker {
   photo     String?
   biography String
   links     Json?
+
   sessions  SessionSpeaker[]
 }
 
 model SessionSpeaker {
   sessionId Int
   speakerId Int
-  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  speaker   Speaker @relation(fields: [speakerId], references: [id], onDelete: Cascade)
+
+  session   Session @relation(fields: [sessionId], references: [id])
+  speaker   Speaker @relation(fields: [speakerId], references: [id])
 
   @@id([sessionId, speakerId])
 }
@@ -62,6 +67,7 @@ model Question {
   name      String?
   upvotes   Int      @default(0)
   createdAt DateTime @default(now())
+
   sessionId Int
   session   Session  @relation(fields: [sessionId], references: [id])
 }
