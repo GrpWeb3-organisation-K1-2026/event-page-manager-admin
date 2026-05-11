@@ -1,12 +1,11 @@
 generator client {
   provider        = "prisma-client-js"
   output          = "../app/generated/prisma"
-  previewFeatures = ["driverAdapters"]   
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")        
 }
 
 model Event {
@@ -16,7 +15,28 @@ model Event {
   startDate   DateTime
   endDate     DateTime
   place       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   sessions    Session[]
+}
+
+model Room {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  sessions  Session[]
+}
+
+model Speaker {
+  id        Int              @id @default(autoincrement())
+  fullName  String
+  biography String
+  photo     String?
+  links     Json?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  sessions  SessionSpeaker[]
 }
 
 model Session {
@@ -28,35 +48,19 @@ model Session {
   capacity    Int
   roomId      Int
   eventId     Int
-
-  event       Event            @relation(fields: [eventId], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   room        Room             @relation(fields: [roomId], references: [id])
-  questions   Question[]
+  event       Event            @relation(fields: [eventId], references: [id])
   speakers    SessionSpeaker[]
-}
-
-model Room {
-  id       Int       @id @default(autoincrement())
-  name     String
-  sessions Session[]
-}
-
-model Speaker {
-  id        Int              @id @default(autoincrement())
-  fullName  String
-  photo     String?
-  biography String
-  links     Json?
-
-  sessions  SessionSpeaker[]
+  questions   Question[]
 }
 
 model SessionSpeaker {
   sessionId Int
   speakerId Int
-
-  session   Session @relation(fields: [sessionId], references: [id])
-  speaker   Speaker @relation(fields: [speakerId], references: [id])
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker   Speaker @relation(fields: [speakerId], references: [id], onDelete: Cascade)
 
   @@id([sessionId, speakerId])
 }
@@ -66,8 +70,7 @@ model Question {
   content   String
   name      String?
   upvotes   Int      @default(0)
-  createdAt DateTime @default(now())
-
   sessionId Int
-  session   Session  @relation(fields: [sessionId], references: [id])
+  createdAt DateTime @default(now())
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }
