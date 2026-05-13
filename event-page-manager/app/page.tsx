@@ -612,7 +612,6 @@ function Footer() {
         ))}
       </div>
 
-      {/* Copyright centré, sans WEB3 mention */}
       <div className="max-w-5xl mx-auto pt-6 border-t border-white/7 text-center">
         <p className="text-[#6b7280] text-[13px]">© 2026 EventSync. Built for live moments.</p>
       </div>
@@ -668,12 +667,10 @@ export default function HomePage() {
       `}</style>
 
       <div className="min-h-screen bg-[#030711] text-white relative overflow-x-hidden">
-        {/* Ambient glows */}
         <div className="fixed rounded-full pointer-events-none z-0" style={{ width: "min(600px, 80vw)", height: "min(600px, 80vw)", background: "radial-gradient(circle, rgba(91,110,245,0.18) 0%, transparent 70%)", top: "-200px", left: "-100px", filter: "blur(120px)" }} />
         <div className="fixed rounded-full pointer-events-none z-0" style={{ width: "min(500px, 70vw)", height: "min(500px, 70vw)", background: "radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%)", top: "40%", right: "-150px", filter: "blur(120px)" }} />
         <div className="fixed rounded-full pointer-events-none z-0" style={{ width: "min(400px, 60vw)", height: "min(400px, 60vw)", background: "radial-gradient(circle, rgba(34,211,160,0.1) 0%, transparent 70%)", bottom: "10%", left: "30%", filter: "blur(120px)" }} />
 
-        {/* Grid lines */}
         <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)", backgroundSize: "80px 80px", maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)" }} />
 
         <Navbar />
