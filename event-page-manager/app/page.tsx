@@ -10,6 +10,7 @@ interface Session {
   endDate: string;
   room: { name: string };
   speakers: { speaker: { fullName: string } }[];
+  event: { id: number; title: string };
   isLive: boolean;
 }
 
@@ -379,7 +380,7 @@ function LiveSection({ sessions }: { sessions: Session[] }) {
       </div>
       <div className="flex flex-col gap-2.5">
         {sessions.slice(0, 4).map((session) => (
-          <Link key={session.id} href={`/sessions/${session.id}`} className="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 bg-[#0c1120] border border-white/7 rounded-2xl px-4 md:px-5 py-4 hover:border-emerald-400/20 hover:bg-emerald-400/3 hover:translate-x-1 transition-all relative overflow-hidden no-underline">
+          <Link key={session.id} href={`/events/${session.event.id}/sessions/${session.id}`} className="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 bg-[#0c1120] border border-white/7 rounded-2xl px-4 md:px-5 py-4 hover:border-emerald-400/20 hover:bg-emerald-400/3 hover:translate-x-1 transition-all relative overflow-hidden no-underline">
             <span className="absolute left-0 top-0 bottom-0 w-0.5 bg-emerald-400 rounded-r" />
             <span className="text-xs font-semibold text-emerald-400 min-w-[80px]" style={{ fontFamily: "Inter, sans-serif" }}>
               {formatTime(session.startDate)} – {formatTime(session.endDate)}
