@@ -158,7 +158,7 @@ function SessionCell({ session, rc, isFav, onToggleFav }: {
         </button>
       </div>
 
-      <Link href={`/sessions/${session.id}`} className="no-underline">
+      <Link href={`/events/${session.event.id}/sessions/${session.id}`} className="no-underline">
         <h4 className="font-bold text-white text-[13px] leading-snug mb-1.5 hover:text-indigo-300 transition-colors line-clamp-2"
           style={{ fontFamily: "Inter, sans-serif", letterSpacing: "-0.2px" }}>
           {session.title}

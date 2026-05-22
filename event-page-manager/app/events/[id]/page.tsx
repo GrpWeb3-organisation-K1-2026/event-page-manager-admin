@@ -160,7 +160,7 @@ function SessionCard({ session, roomIndex, gradIndex }: { session: Session; room
 
   return (
     <Link
-      href={`/sessions/${session.id}`}
+      href={`/events/${params.id}/sessions/${session.id}`}
       className="group relative no-underline block overflow-hidden rounded-2xl border border-white/7 bg-[#0c1120] hover:-translate-y-1 hover:border-indigo-500/30 hover:shadow-[0_24px_48px_rgba(0,0,0,0.5)] transition-all duration-300"
     >
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
