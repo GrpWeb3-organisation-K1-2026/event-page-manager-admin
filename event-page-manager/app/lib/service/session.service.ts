@@ -107,12 +107,10 @@ function validateCreateDTO(dto: CreateSessionDTO) {
   if (typeof dto.capacity !== "number" || dto.capacity < 1)
     throw new ValidationError("capacity must be a positive integer");
 
-  if (dto.speakerIds !== undefined) {
-    if (!Array.isArray(dto.speakerIds))
-      throw new ValidationError("speakerIds must be an array of numbers");
-    if (dto.speakerIds.some((id) => typeof id !== "number"))
-      throw new ValidationError("speakerIds must be an array of numbers");
-  }
+  if (!dto.speakerIds || !Array.isArray(dto.speakerIds) || dto.speakerIds.length === 0)
+    throw new ValidationError("A session must have at least one speaker");
+  if (dto.speakerIds.some((id) => typeof id !== "number"))
+    throw new ValidationError("speakerIds must be an array of numbers");
 
   validateDates(dto.startDate, dto.endDate);
 }
