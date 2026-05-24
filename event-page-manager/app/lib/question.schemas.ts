@@ -10,6 +10,7 @@ export const CreateQuestionSchema = z.object({
     .string()
     .trim()
     .max(100, "name must be at most 100 characters")
+    .nullable()
     .optional(),
   sessionId: z
     .number({ required_error: "sessionId is required" })
