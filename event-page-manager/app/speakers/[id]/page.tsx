@@ -138,7 +138,7 @@ function SessionRow({ session }: { session: Session }) {
   const upcoming = isUpcoming(session.startDate);
 
   return (
-    <Link href={`/sessions/${session.id}`} className="group flex flex-col sm:flex-row sm:items-center gap-3 bg-[#0c1120] border border-white/7 rounded-2xl px-5 py-4 hover:border-indigo-500/30 hover:bg-indigo-500/3 hover:translate-x-1 transition-all no-underline relative overflow-hidden">
+    <Link href={`/events/${session.event.id}/sessions/${session.id}`} className="group flex flex-col sm:flex-row sm:items-center gap-3 bg-[#0c1120] border border-white/7 rounded-2xl px-5 py-4 hover:border-indigo-500/30 hover:bg-indigo-500/3 hover:translate-x-1 transition-all no-underline relative overflow-hidden">
       <span className={`absolute left-0 top-0 bottom-0 w-0.5 rounded-r ${live ? "bg-emerald-400" : upcoming ? "bg-indigo-500" : "bg-white/10"}`} />
       <div className="flex-1 min-w-0">
         <h4 className="font-semibold text-white text-[14px] md:text-[15px] leading-snug mb-1.5 group-hover:text-indigo-300 transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>
