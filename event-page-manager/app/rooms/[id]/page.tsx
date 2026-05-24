@@ -159,7 +159,7 @@ function SessionRow({ session, gradIndex, isFav, onToggleFav }: {
 
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap items-center gap-2 mb-1">
-          <Link href={`/sessions/${session.id}`} className="no-underline">
+          <Link href={`/events/${session.event.id}/sessions/${session.id}`} className="no-underline">
             <h3 className="font-bold text-white text-[14px] hover:text-indigo-300 transition-colors"
               style={{ fontFamily: "Inter, sans-serif", letterSpacing: "-0.3px" }}>
               {session.title}
@@ -213,7 +213,7 @@ function SessionRow({ session, gradIndex, isFav, onToggleFav }: {
           className={`w-7 h-7 rounded-lg flex items-center justify-center border transition-all ${isFav ? "bg-indigo-500/15 border-indigo-500/30 text-indigo-400" : "bg-white/4 border-white/7 text-[#4b5563] hover:text-indigo-400 hover:border-indigo-500/20"}`}>
           <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5"><path d="M3 2h10v13l-5-3-5 3V2z" /></svg>
         </button>
-        <Link href={`/sessions/${session.id}`}
+        <Link href={`/events/${session.event.id}/sessions/${session.id}`}
           className="w-7 h-7 rounded-lg bg-white/4 border border-white/7 flex items-center justify-center text-[#4b5563] hover:text-indigo-400 hover:border-indigo-500/20 transition-all no-underline">
           <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
         </Link>
@@ -360,7 +360,7 @@ export default function RoomDetailPage({ params }: { params: Promise<{ id: strin
                   <span className="text-white font-bold text-sm block">{liveNow[0]?.title}</span>
                   <span className="text-emerald-400 text-[11px]">Happening right now in this room</span>
                 </div>
-                <Link href={`/sessions/${liveNow[0]?.id}`}
+                <Link href={`/events/${liveNow[0]?.event.id}/sessions/${liveNow[0]?.id}`}
                   className="ml-auto text-[11px] font-bold uppercase tracking-wider text-emerald-400 hover:text-emerald-300 no-underline transition-colors">
                   Join →
                 </Link>
