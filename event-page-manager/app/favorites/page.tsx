@@ -181,7 +181,7 @@ function FavoriteCard({ session, index, onRemove }: { session: Session; index: n
           </Link>
         </div>
 
-        <Link href={`/sessions/${session.id}`} className="no-underline">
+        <Link href={`/events/${session.event.id}/sessions/${session.id}`} className="no-underline">
           <h3 className="font-black text-white text-[14px] md:text-[15px] leading-snug mb-2 hover:text-transparent transition-all duration-300 cursor-pointer"
             style={{ fontFamily: "Inter, sans-serif", letterSpacing: "-0.3px",
               backgroundImage: `linear-gradient(90deg, #f0f4ff, ${grad.accent})`,
@@ -226,7 +226,7 @@ function FavoriteCard({ session, index, onRemove }: { session: Session; index: n
               </span>
             </div>
           ) : <div />}
-          <Link href={`/sessions/${session.id}`}
+          <Link href={`/events/${session.event.id}/sessions/${session.id}`}
             className="flex items-center gap-1 text-[11px] font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-200 no-underline"
             style={{ color: grad.accent }}>
             View <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
