@@ -22,8 +22,10 @@ export function formatSpeakerWithStatus(speaker: any) {
     sessions: speaker.sessions.map((ss: any) => {
       const s = ss.session;
       return {
-        ...s,
-        ...computeSessionStatus(new Date(s.startDate), new Date(s.endDate)),
+        session: {
+          ...s,
+          ...computeSessionStatus(new Date(s.startDate), new Date(s.endDate)),
+        },
       };
     }),
   };

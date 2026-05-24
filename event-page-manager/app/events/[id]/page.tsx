@@ -151,7 +151,7 @@ function Navbar() {
 }
 
 
-function SessionCard({ session, roomIndex, gradIndex }: { session: Session; roomIndex: number; gradIndex: number }) {
+function SessionCard({ session, roomIndex, gradIndex, eventId }: { session: Session; roomIndex: number; gradIndex: number; eventId: string }) {
   const live = isLive(session.startDate, session.endDate);
   const upcoming = isUpcoming(session.startDate);
   const ended = !live && !upcoming;
@@ -160,7 +160,7 @@ function SessionCard({ session, roomIndex, gradIndex }: { session: Session; room
 
   return (
     <Link
-      href={`/events/${params.id}/sessions/${session.id}`}
+      href={`/events/${eventId}/sessions/${session.id}`}
       className="group relative no-underline block overflow-hidden rounded-2xl border border-white/7 bg-[#0c1120] hover:-translate-y-1 hover:border-indigo-500/30 hover:shadow-[0_24px_48px_rgba(0,0,0,0.5)] transition-all duration-300"
     >
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -482,7 +482,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
                     <div className={`grid gap-4 ${sessions.length === 1 ? "grid-cols-1 max-w-md" : sessions.length === 2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"}`}>
                       {sessions.map((session, si) => (
-                        <SessionCard
+                        <SessionCard eventId={id}
                           key={session.id}
                           session={session}
                           roomIndex={roomIndexMap.get(session.room.id) ?? 0}
