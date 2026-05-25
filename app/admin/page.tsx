@@ -37,7 +37,7 @@ interface Session {
   endDate: string;
   capacity: number;
   roomId?: number;
-  eventId?: number;
+  eventId?: numb
   room?: { id: number; name: string };
   event?: { id: number; title: string };
   speakers?: { speaker: { id: number; fullName: string } }[];
@@ -180,7 +180,7 @@ function Navbar({ activeTab, onTabChange }: { activeTab: TabId; onTabChange: (t:
         <div className="ml-auto flex items-center gap-2">
           <Link href="/events" className="hidden sm:flex items-center gap-1.5 text-[#6b7280] hover:text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-white/6 transition-all no-underline">
             <svg className="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M10 6H2M6 10l-4-4 4-4" /></svg>
-            Return to home page
+            Site public
           </Link>
           <span className="bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-2">
             <AdminShieldIcon />Admin
